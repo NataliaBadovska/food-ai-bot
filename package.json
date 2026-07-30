@@ -4,13 +4,15 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-  "dev": "tsx watch src/index.ts"
-},
+    "dev": "tsx watch src/index.ts",
+    "models": "tsx src/scripts/listModels.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@google/genai": "^2.14.0",
     "dotenv": "^17.4.2",
     "grammy": "^1.45.1"
   },
