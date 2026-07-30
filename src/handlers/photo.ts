@@ -1,18 +1,16 @@
 import { bot } from "../bot/bot.js";
-import { getPhotoFile } from "../services/telegram.service.js";
+import { downloadPhoto } from "../services/telegram.service.js";
 
 bot.on("message:photo", async (ctx) => {
-  const photos = ctx.message.photo;
-  const photo = photos[photos.length - 1];
+  const photo = ctx.message.photo.at(-1);
 
-  if (!photo) {
-    await ctx.reply("❌ Не вдалося отримати фото.")
-    return;
-  }
+  if (!photo) return;
 
-  const file = await getPhotoFile(photo.file_id);
+  await ctx.reply("📥 Завантажую фото...");
 
-  console.log(file);
+  const buffer = await downloadPhoto(photo.file_id);
 
-  await ctx.reply("📷 Фото отримано!");
+  console.log("Photo size:", buffer.length);
+
+  await ctx.reply(`✅ Фото завантажено (${buffer.length} bytes)`);
 });
