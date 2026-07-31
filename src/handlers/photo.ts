@@ -6,6 +6,8 @@ import { analyzeMeal } from "../services/meal-analysis.service.js";
 import { analyzeNutrition } from "../services/nutrition.service.js";
 import { generateCoachComment } from "../services/coach.service.js";
 import { formatMeal } from "../services/meal-formatter.service.js";
+import { userService } from "../services/user.service.js";
+import { mealService } from "../services/meal.service.js";
 
 export function registerPhotoHandler(bot: Bot<BotContext>) {
   bot.on("message:photo", async (ctx) => {
@@ -30,6 +32,21 @@ export function registerPhotoHandler(bot: Bot<BotContext>) {
       const nutrition = await analyzeNutrition(meal);
 
       const coachComment = await generateCoachComment(nutrition);
+
+      const user = await userService.getByTelegramId(ctx.from.id);
+
+if (user) {
+  await mealService.saveMeal({
+    userId: user.id,
+    imageId: photo.file_id,
+    description,
+    calories: nutrition.total.calories,
+    protein: nutrition.total.protein,
+    fat: nutrition.total.fat,
+    carbs: nutrition.total.carbs,
+    coachComment,
+  });
+}
 
       const message = formatMeal(
         meal,

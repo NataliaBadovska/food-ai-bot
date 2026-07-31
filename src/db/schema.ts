@@ -47,3 +47,29 @@ export const users = sqliteTable("users", {
     .$defaultFn(() => Date.now())
     .notNull(),
 });
+
+export const meals = sqliteTable("meals", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+
+  userId: integer("user_id")
+  .notNull()
+  .references(() => users.id),
+
+  imageId: text("image_id"),
+
+  description: text("description"),
+
+  calories: integer("calories").notNull(),
+
+  protein: integer("protein").notNull(),
+
+  fat: integer("fat").notNull(),
+
+  carbs: integer("carbs").notNull(),
+
+  coachComment: text("coach_comment"),
+
+  createdAt: integer("created_at")
+    .$defaultFn(() => Date.now())
+    .notNull(),
+});
