@@ -1,4 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
+import { ZodType } from "zod";
 import { GEMINI_API_KEY } from "../config/env.js";
 
 if (!GEMINI_API_KEY) {
@@ -18,6 +19,15 @@ function parseJson<T>(text: string): T {
     .trim();
 
   return JSON.parse(clean) as T;
+}
+
+function validateJson<T>(
+  text: string,
+  schema: ZodType<T>
+): T {
+  const data = parseJson<unknown>(text);
+
+  return schema.parse(data);
 }
 
 export async function generateText(prompt: string): Promise<string> {
@@ -55,8 +65,6 @@ ${JSON.stringify(data, null, 2)}
     ],
   });
 
-  const text = response.text ?? "";
-
  return parseJson<T>(response.text ?? "");
 }
 
@@ -83,7 +91,6 @@ export async function generateJsonFromImage<T>(
     ],
   });
 
-  const text = response.text ?? "";
-
  return parseJson<T>(response.text ?? "");
 }
+
