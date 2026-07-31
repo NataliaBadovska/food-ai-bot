@@ -1,8 +1,10 @@
-import { bot } from "../bot/bot.js";
+import type { Bot } from "grammy";
+import type { BotContext } from "../types/context.js";
+
 import { generateText } from "../services/gemini.service.js";
 
-bot.on("message:text", async (ctx) => {
-  if (ctx.message.text === "/ai") {
+export function registerTextHandler(bot: Bot<BotContext>) {
+  bot.command("ai", async (ctx) => {
     await ctx.reply("🧠 Думаю...");
 
     try {
@@ -13,12 +15,13 @@ bot.on("message:text", async (ctx) => {
       await ctx.reply(answer);
     } catch (error) {
       console.error(error);
-
       await ctx.reply("❌ Помилка Gemini");
     }
+  });
 
-    return;
-  }
+  bot.on("message:text", async (ctx) => {
+    if (ctx.message.text.startsWith("/")) return;
 
-  await ctx.reply(`Ти написав: ${ctx.message.text}`);
-});
+    await ctx.reply(`Ти написав: ${ctx.message.text}`);
+  });
+}

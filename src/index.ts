@@ -1,14 +1,29 @@
-
 import { bot } from "./bot/bot.js";
 
-import "./handlers/start.js";
-import "./handlers/text.js";
-import "./handlers/photo.js";
+import { conversations, createConversation } from "@grammyjs/conversations";
 
-bot.catch((err) => {
-  console.error("Bot error:", err.error);
+import { onboardingConversation } from "./conversations/onboarding.conversation.js";
+
+import { registerStartHandler } from "./handlers/start.js";
+import { registerTextHandler } from "./handlers/text.js";
+import { registerPhotoHandler } from "./handlers/photo.js";
+
+await bot.api.deleteWebhook({
+  drop_pending_updates: true,
 });
 
-bot.start();
+bot.use(conversations());
+
+bot.use(createConversation(onboardingConversation));
+
+registerStartHandler(bot);
+registerTextHandler(bot);
+registerPhotoHandler(bot);
+
+bot.catch((err) => {
+  console.error(err.error);
+});
+
+await bot.start();
 
 console.log("🚀 Bot started");
