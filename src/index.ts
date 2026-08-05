@@ -7,6 +7,8 @@ import { onboardingConversation } from "./conversations/onboarding.conversation.
 import { registerStartHandler } from "./handlers/start.js";
 import { registerTextHandler } from "./handlers/text.js";
 import { registerPhotoHandler } from "./handlers/photo.js";
+import { registerTodayHandler } from "./handlers/today.js";
+import { registerHistoryHandler } from "./handlers/history.js";
 
 await bot.api.deleteWebhook({
   drop_pending_updates: true,
@@ -17,8 +19,11 @@ bot.use(conversations());
 bot.use(createConversation(onboardingConversation));
 
 registerStartHandler(bot);
-registerTextHandler(bot);
 registerPhotoHandler(bot);
+registerTodayHandler(bot);
+registerHistoryHandler(bot);
+
+registerTextHandler(bot);
 
 bot.catch((err) => {
   console.error(err.error);

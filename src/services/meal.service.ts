@@ -9,6 +9,17 @@ async saveMeal(data: typeof meals.$inferInsert) {
   async getHistory(userId: number) {
     return mealRepository.findByUser(userId);
   }
+
+  async getToday(userId: number) {
+  const start = new Date();
+
+  start.setHours(0, 0, 0, 0);
+
+  return mealRepository.findToday(
+    userId,
+    start.getTime()
+  );
+}
 }
 
 export const mealService = new MealService();

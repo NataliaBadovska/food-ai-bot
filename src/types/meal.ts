@@ -5,5 +5,10 @@ export interface Food {
 }
 
 export interface MealAnalysis {
-  foods: Food[];
+  foods: {
+    name: string;
+    estimatedWeight: number;
+  }[];
+
+  coachComment: string;
 }
