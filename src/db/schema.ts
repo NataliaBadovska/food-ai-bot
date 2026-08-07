@@ -1,15 +1,16 @@
 import {
-  sqliteTable,
+  pgTable,
+  serial,
   integer,
   text,
-} from "drizzle-orm/sqlite-core";
+  bigint,
+   real
+} from "drizzle-orm/pg-core";
 
-export const users = sqliteTable("users", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
 
-  telegramId: integer("telegram_id")
-    .notNull()
-    .unique(),
+  telegramId: integer("telegram_id").notNull().unique(),
 
   firstName: text("first_name").notNull(),
 
@@ -39,21 +40,25 @@ export const users = sqliteTable("users", {
 
   dailyCarbs: integer("daily_carbs").notNull(),
 
-  createdAt: integer("created_at")
-    .$defaultFn(() => Date.now())
-    .notNull(),
+  createdAt: bigint("created_at", {
+    mode: "number",
+  })
+    .notNull()
+    .$defaultFn(() => Date.now()),
 
-  updatedAt: integer("updated_at")
-    .$defaultFn(() => Date.now())
-    .notNull(),
+  updatedAt: bigint("updated_at", {
+    mode: "number",
+  })
+    .notNull()
+    .$defaultFn(() => Date.now()),
 });
 
-export const meals = sqliteTable("meals", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
+export const meals = pgTable("meals", {
+  id: serial("id").primaryKey(),
 
   userId: integer("user_id")
-  .notNull()
-  .references(() => users.id),
+    .notNull()
+    .references(() => users.id),
 
   imageId: text("image_id"),
 
@@ -61,15 +66,17 @@ export const meals = sqliteTable("meals", {
 
   calories: integer("calories").notNull(),
 
-  protein: integer("protein").notNull(),
+  protein: real("protein").notNull(),
 
-  fat: integer("fat").notNull(),
+  fat: real("fat").notNull(),
 
-  carbs: integer("carbs").notNull(),
+  carbs: real("carbs").notNull(),
 
   coachComment: text("coach_comment"),
 
-  createdAt: integer("created_at")
-    .$defaultFn(() => Date.now())
-    .notNull(),
+  createdAt: bigint("created_at", {
+    mode: "number",
+  })
+    .notNull()
+    .$defaultFn(() => Date.now()),
 });
