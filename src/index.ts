@@ -5,6 +5,7 @@ import { session, webhookCallback } from "grammy";
 
 import { createServer } from "node:http";
 
+
 import { onboardingConversation } from "./conversations/onboarding.conversation.js";
 
 import { registerStartHandler } from "./handlers/start.js";
@@ -58,9 +59,22 @@ await bot.api.setMyCommands([
 
 const PORT = Number(process.env.PORT) || 3000;
 
-const server = createServer(
-  webhookCallback(bot, "http")
-);
+const handleUpdate = webhookCallback(bot, "http");
+
+const server = createServer((req, res) => {
+  if (req.url === "/") {
+    res.writeHead(200);
+    res.end("OK");
+    return;
+  }
+
+  if (req.url === "/webhook") {
+    return handleUpdate(req, res);
+  }
+
+  res.writeHead(404);
+  res.end();
+});
 
 server.listen(PORT, () => {
   console.log(`🚀 Bot started on port ${PORT}`);
