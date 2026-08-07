@@ -15,27 +15,8 @@ class MealRepository {
       .where(eq(meals.userId, userId))
       .orderBy(desc(meals.createdAt));
   }
-
-//   async findToday(userId: number, startOfDay: number) {
-//   return db
-//     .select()
-//     .from(meals)
-//     .where(
-//       and(
-//         eq(meals.userId, userId),
-//         gte(meals.createdAt, startOfDay)
-//       )
-//     )
-//     .orderBy(desc(meals.createdAt));
-  // }
   
   async findToday(userId: number, startOfDay: number) {
-  console.log("userId:", userId);
-  console.log("startOfDay:", startOfDay);
-
-  const allMeals = await db.select().from(meals);
-  console.log("ALL MEALS:", allMeals);
-
   const todayMeals = await db
     .select()
     .from(meals)
@@ -46,8 +27,6 @@ class MealRepository {
       )
     )
     .orderBy(desc(meals.createdAt));
-
-  console.log("TODAY MEALS:", todayMeals);
 
   return todayMeals;
 }

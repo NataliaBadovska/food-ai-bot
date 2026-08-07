@@ -1,4 +1,9 @@
-import type { Context } from "grammy";
+import type { Context, SessionFlavor } from "grammy";
 import type { ConversationFlavor } from "@grammyjs/conversations";
 
-export interface BotContext extends ConversationFlavor<Context> {}
+import type { SessionData } from "./session.js";
+
+export interface BotContext
+  extends Context,
+    SessionFlavor<SessionData>,
+    ConversationFlavor<Context> {}

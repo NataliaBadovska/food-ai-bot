@@ -2,6 +2,11 @@ import { userRepository } from "../repositories/user.repository.js";
 import { calculatorService } from "./calculator.service.js";
 
 import type { ProfileData } from "../types/profile.js";
+import type {
+  Gender,
+  Goal,
+  ActivityLevel,
+} from "../types/user.js";
 
 interface RegisterUserData extends ProfileData {
   telegramId: number;
@@ -56,6 +61,28 @@ class UserService {
 
     return nutrition;
   }
+
+  async recalculateNutrition(telegramId: number) {
+  const user = await this.getByTelegramId(telegramId);
+
+  if (!user) return;
+
+  const nutrition = calculatorService.buildNutritionProfile(
+  user.gender as Gender,
+  user.age,
+  user.height,
+  user.weight,
+  user.activityLevel as ActivityLevel,
+  user.goal as Goal
+);
+
+  await userRepository.update(telegramId, {
+    dailyCalories: nutrition.calories,
+    dailyProtein: nutrition.protein,
+    dailyFat: nutrition.fat,
+    dailyCarbs: nutrition.carbs,
+  });
+}
 
   async updateProfile(
     telegramId: number,
