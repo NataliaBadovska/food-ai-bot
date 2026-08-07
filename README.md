@@ -22,8 +22,10 @@ Telegram-бот для аналізу фотографій їжі за допо�
 - Grammy
 - Google Gemini API
 - Drizzle ORM
-- SQLite (планується PostgreSQL)
+- PostgreSQL
 - OpenFoodFacts API
+- Render(деплой)
+- Сonsole.neon.tech(деплой БД)
 
 ---
 
