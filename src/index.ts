@@ -1,7 +1,9 @@
 import { bot } from "./bot/bot.js";
 
 import { conversations, createConversation } from "@grammyjs/conversations";
-import { session } from "grammy";
+import { session, webhookCallback } from "grammy";
+
+import { createServer } from "node:http";
 
 import { onboardingConversation } from "./conversations/onboarding.conversation.js";
 
@@ -12,69 +14,35 @@ import { registerTodayHandler } from "./handlers/today.js";
 import { registerHistoryHandler } from "./handlers/history.js";
 import { registerProfileHandler } from "./handlers/profile.js";
 import { registerProfileEditHandler } from "./handlers/profile-edit.js";
+
 import { editWeightConversation } from "./conversations/edit-weight.conversation.js";
 import { editAgeConversation } from "./conversations/edit-age.conversation.js";
 import { editHeightConversation } from "./conversations/edit-height.conversation.js";
 import { editActivityConversation } from "./conversations/edit-activity.conversation.js";
 import { editGoalConversation } from "./conversations/edit-goal.conversation.js";
 
-await bot.api.deleteWebhook({
-  drop_pending_updates: true,
-});
-
 bot.use(
   session({
     initial: () => ({}),
-  })
+  }),
 );
 
 bot.use(conversations());
 
 bot.use(createConversation(onboardingConversation));
 
-bot.use(
-  createConversation(
-    editWeightConversation,
-    "editWeight"
-  )
-);
-
-bot.use(
-  createConversation(
-    editHeightConversation,
-    "editHeight"
-  )
-);
-
-bot.use(
-  createConversation(
-    editAgeConversation,
-    "editAge"
-  )
-);  
-
-bot.use(
-  createConversation(
-    editActivityConversation,
-    "editActivity"
-  )
-);
-
-bot.use(
-  createConversation(
-    editGoalConversation,
-    "editGoal"
-  )
-);
+bot.use(createConversation(editWeightConversation, "editWeight"));
+bot.use(createConversation(editHeightConversation, "editHeight"));
+bot.use(createConversation(editAgeConversation, "editAge"));
+bot.use(createConversation(editActivityConversation, "editActivity"));
+bot.use(createConversation(editGoalConversation, "editGoal"));
 
 registerStartHandler(bot);
 registerPhotoHandler(bot);
 registerTodayHandler(bot);
 registerHistoryHandler(bot);
 registerProfileHandler(bot);
-registerProfileHandler(bot);
 registerProfileEditHandler(bot);
-
 registerTextHandler(bot);
 
 bot.catch((err) => {
@@ -88,6 +56,12 @@ await bot.api.setMyCommands([
   { command: "profile", description: "Мій профіль" },
 ]);
 
-await bot.start();
+const PORT = Number(process.env.PORT) || 3000;
 
-console.log("🚀 Bot started");
+const server = createServer(
+  webhookCallback(bot, "http")
+);
+
+server.listen(PORT, () => {
+  console.log(`🚀 Bot started on port ${PORT}`);
+});
