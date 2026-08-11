@@ -39,6 +39,30 @@ export class UserRepository {
       .delete(users)
       .where(eq(users.telegramId, telegramId));
   }
+
+  async updateHealthNotes(
+  telegramId: number,
+  healthNotes: string | null
+) {
+  await db
+    .update(users)
+    .set({
+      healthNotes,
+      updatedAt: Date.now(),
+    })
+    .where(eq(users.telegramId, telegramId));
+}
+
+async getHealthNotes(telegramId: number) {
+  const [user] = await db
+    .select({
+      healthNotes: users.healthNotes,
+    })
+    .from(users)
+    .where(eq(users.telegramId, telegramId));
+
+  return user?.healthNotes ?? null;
+}
 }
 
 export const userRepository = new UserRepository();

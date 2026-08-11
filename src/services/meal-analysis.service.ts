@@ -13,6 +13,7 @@ interface UserProfile {
   dailyProtein: number;
   dailyFat: number;
   dailyCarbs: number;
+  healthNotes?: string | null;
 }
 
 export async function analyzeMeal(
@@ -25,7 +26,21 @@ ${mealPrompt}
 
 Профіль користувача:
 
-${JSON.stringify(user, null, 2)}
+Вік: ${user.age}
+Стать: ${user.gender}
+Зріст: ${user.height} см
+Вага: ${user.weight} кг
+Активність: ${user.activityLevel}
+Ціль: ${user.goal}
+
+Денна норма:
+- Калорії: ${user.dailyCalories}
+- Білки: ${user.dailyProtein} г
+- Жири: ${user.dailyFat} г
+- Вуглеводи: ${user.dailyCarbs} г
+
+Особливості здоров'я:
+${user.healthNotes ?? "немає"}
 
 ${description ? `Опис страви:\n${description}` : ""}
 `;

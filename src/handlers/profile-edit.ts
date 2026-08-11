@@ -11,22 +11,24 @@ export function registerProfileEditHandler(bot: Bot<BotContext>) {
     await ctx.answerCallbackQuery();
     await ctx.conversation.enter("editHeight");
   });
-    
-    bot.callbackQuery("edit_age", async (ctx) => {
-  await ctx.answerCallbackQuery();
 
-  await ctx.conversation.enter("editAge");
-    });
-    
-    bot.callbackQuery("edit_activity", async (ctx) => {
-  await ctx.answerCallbackQuery();
+  bot.callbackQuery("edit_age", async (ctx) => {
+    await ctx.answerCallbackQuery();
+    await ctx.conversation.enter("editAge");
+  });
 
-  await ctx.conversation.enter("editActivity");
-    });
-    
-    bot.callbackQuery("edit_goal", async (ctx) => {
-  await ctx.answerCallbackQuery();
+  bot.callbackQuery("edit_activity", async (ctx) => {
+    await ctx.answerCallbackQuery();
+    await ctx.conversation.enter("editActivity");
+  });
 
-  await ctx.conversation.enter("editGoal");
-});
+  bot.callbackQuery("edit_goal", async (ctx) => {
+    await ctx.answerCallbackQuery();
+    await ctx.conversation.enter("editGoal");
+  });
+
+  bot.callbackQuery("edit_health", async (ctx) => {
+    await ctx.answerCallbackQuery();
+    await ctx.conversation.enter("editHealth");
+  });
 }

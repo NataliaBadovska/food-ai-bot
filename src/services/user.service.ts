@@ -94,6 +94,22 @@ class UserService {
   async delete(telegramId: number) {
     await userRepository.delete(telegramId);
   }
+
+  async updateHealthNotes(
+  telegramId: number,
+  healthNotes: string | null
+) {
+  return userRepository.updateHealthNotes(
+    telegramId,
+    healthNotes
+  );
+}
+
+async getHealthNotes(telegramId: number) {
+  return userRepository.getHealthNotes(
+    telegramId
+  );
+}
 }
 
 export const userService = new UserService();

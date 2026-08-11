@@ -29,26 +29,26 @@ export function registerProfileHandler(bot: Bot<BotContext>) {
     };
 
     const goalText = (() => {
-  switch (user.goal) {
-    case "lose_weight":
-    case "lose":
-      return "Схуднення";
+      switch (user.goal) {
+        case "lose_weight":
+        case "lose":
+          return "Схуднення";
 
-    case "maintain_weight":
-    case "maintain":
-      return "Підтримка ваги";
+        case "maintain_weight":
+        case "maintain":
+          return "Підтримка ваги";
 
-    case "gain_weight":
-    case "gain":
-      return "Набір ваги";
+        case "gain_weight":
+        case "gain":
+          return "Набір ваги";
 
-    default:
-      return user.goal;
-  }
-})();
+        default:
+          return user.goal;
+      }
+    })();
 
-    await ctx.reply(`
-👤 Ваш профіль
+    await ctx.reply(
+`👤 Ваш профіль
 
 Вік: ${user.age}
 Стать: ${gender}
@@ -62,6 +62,9 @@ ${activity[user.activityLevel] ?? user.activityLevel}
 🎯 Ціль:
 ${goalText}
 
+🩺 Особливості здоров'я:
+${user.healthNotes ?? "Не вказано"}
+
 ━━━━━━━━━━━━━━
 
 🔥 Денна норма:
@@ -74,12 +77,10 @@ ${user.dailyProtein} г
 ${user.dailyFat} г
 
 🍚 Вуглеводи:
-${user.dailyCarbs} г
-`,
-        {
-    reply_markup: profileEditKeyboard,
-  }
+${user.dailyCarbs} г`,
+      {
+        reply_markup: profileEditKeyboard,
+      }
     );
-   
   });
 }

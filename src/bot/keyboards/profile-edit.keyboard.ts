@@ -9,4 +9,6 @@ export const profileEditKeyboard = new InlineKeyboard()
   .row()
   .text("🏃 Активність", "edit_activity")
   .row()
-  .text("🎯 Ціль", "edit_goal");
+  .text("🎯 Ціль", "edit_goal")
+  .row()
+  .text("🩺 Особливості здоров'я", "edit_health");

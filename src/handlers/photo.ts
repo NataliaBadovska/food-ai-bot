@@ -42,22 +42,23 @@ async function processPhoto(
       return;
     }
 
-    const meal = await analyzeMeal(
-      buffer,
-      {
-        age: user.age,
-        gender: user.gender,
-        height: user.height,
-        weight: user.weight,
-        activityLevel: user.activityLevel,
-        goal: user.goal,
-        dailyCalories: user.dailyCalories,
-        dailyProtein: user.dailyProtein,
-        dailyFat: user.dailyFat,
-        dailyCarbs: user.dailyCarbs,
-      },
-      description
-    );
+ const meal = await analyzeMeal(
+  buffer,
+  {
+    age: user.age,
+    gender: user.gender,
+    height: user.height,
+    weight: user.weight,
+    activityLevel: user.activityLevel,
+    goal: user.goal,
+    dailyCalories: user.dailyCalories,
+    dailyProtein: user.dailyProtein,
+    dailyFat: user.dailyFat,
+    dailyCarbs: user.dailyCarbs,
+    healthNotes: user.healthNotes,
+  },
+  description
+);
 
     const nutrition = await analyzeNutrition(meal);
 

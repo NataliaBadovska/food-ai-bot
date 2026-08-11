@@ -40,6 +40,8 @@ export const users = pgTable("users", {
 
   dailyCarbs: integer("daily_carbs").notNull(),
 
+  healthNotes: text("health_notes"),
+
   createdAt: bigint("created_at", {
     mode: "number",
   })

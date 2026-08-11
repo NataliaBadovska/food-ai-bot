@@ -21,6 +21,7 @@ import { editAgeConversation } from "./conversations/edit-age.conversation.js";
 import { editHeightConversation } from "./conversations/edit-height.conversation.js";
 import { editActivityConversation } from "./conversations/edit-activity.conversation.js";
 import { editGoalConversation } from "./conversations/edit-goal.conversation.js";
+import { editHealthConversation } from "./conversations/edit-health.conversation.js";
 
 bot.use(
   session({
@@ -37,6 +38,9 @@ bot.use(createConversation(editHeightConversation, "editHeight"));
 bot.use(createConversation(editAgeConversation, "editAge"));
 bot.use(createConversation(editActivityConversation, "editActivity"));
 bot.use(createConversation(editGoalConversation, "editGoal"));
+bot.use(createConversation(editHealthConversation, "editHealth"));
+  
+
 
 registerStartHandler(bot);
 registerPhotoHandler(bot);
