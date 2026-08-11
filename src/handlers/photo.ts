@@ -94,13 +94,17 @@ await mealService.saveMeal({
     await ctx.reply(message);
 
     console.log("✅ Analysis completed");
-  } catch (error) {
-    console.error("PHOTO ERROR:", error);
+  }catch (error) {
+  console.error("PHOTO ERROR:", error);
 
-    try {
-      await ctx.reply(
-        "❌ Не вдалося проаналізувати фотографію."
-      );
-    } catch {}
+  if (error instanceof Error) {
+    console.error(error.stack);
   }
+
+  try {
+    await ctx.reply(
+      `❌ ${error instanceof Error ? error.message : "Невідома помилка"}`
+    );
+  } catch {}
+}
 }
