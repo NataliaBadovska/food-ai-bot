@@ -34,32 +34,52 @@ export function registerTodayHandler(bot: Bot<BotContext>) {
       }
     );
 
+    const remainingCalories = Math.max(
+      user.dailyCalories - total.calories,
+      0
+    );
+
+    const remainingProtein = Math.max(
+      user.dailyProtein - total.protein,
+      0
+    );
+
+    const remainingFat = Math.max(
+      user.dailyFat - total.fat,
+      0
+    );
+
+    const remainingCarbs = Math.max(
+      user.dailyCarbs - total.carbs,
+      0
+    );
+
     await ctx.reply(`
 🔥 За сьогодні
 
 Калорії:
-${total.calories} / ${user.dailyCalories} ккал
+${total.calories.toFixed(0)} / ${user.dailyCalories} ккал
 
 🥩 Білки:
-${total.protein} / ${user.dailyProtein} г
+${total.protein.toFixed(1)} / ${user.dailyProtein} г
 
 🥑 Жири:
-${total.fat} / ${user.dailyFat} г
+${total.fat.toFixed(1)} / ${user.dailyFat} г
 
 🍚 Вуглеводи:
-${total.carbs} / ${user.dailyCarbs} г
+${total.carbs.toFixed(1)} / ${user.dailyCarbs} г
 
 ━━━━━━━━━━━━━━
 
 Залишилось:
 
-🔥 ${Math.max(user.dailyCalories - total.calories, 0)} ккал
+🔥 ${remainingCalories.toFixed(0)} ккал
 
-🥩 ${Math.max(user.dailyProtein - total.protein, 0)} г
+🥩 ${remainingProtein.toFixed(1)} г
 
-🥑 ${Math.max(user.dailyFat - total.fat, 0)} г
+🥑 ${remainingFat.toFixed(1)} г
 
-🍚 ${Math.max(user.dailyCarbs - total.carbs, 0)} г
+🍚 ${remainingCarbs.toFixed(1)} г
 `);
   });
 }
