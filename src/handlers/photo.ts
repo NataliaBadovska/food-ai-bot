@@ -62,16 +62,26 @@ async function processPhoto(
 
     const nutrition = await analyzeNutrition(meal);
 
-    await mealService.saveMeal({
-      userId: user.id,
-      imageId: fileId,
-      ...(description && { description }),
-      calories: nutrition.total.calories,
-      protein: nutrition.total.protein,
-      fat: nutrition.total.fat,
-      carbs: nutrition.total.carbs,
-      coachComment: meal.coachComment,
-    });
+await mealService.saveMeal({
+  userId: user.id,
+  imageId: fileId,
+  ...(description && { description }),
+
+  mealName: meal.mealName,
+
+  foods: JSON.stringify(
+    meal.foods.map((food) => ({
+      name: food.name,
+      estimatedWeight: food.estimatedWeight,
+    }))
+  ),
+
+  calories: nutrition.total.calories,
+  protein: nutrition.total.protein,
+  fat: nutrition.total.fat,
+  carbs: nutrition.total.carbs,
+  coachComment: meal.coachComment,
+});
 
     const message = formatMeal(
       meal,

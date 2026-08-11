@@ -5,11 +5,7 @@ import { mealService } from "../services/meal.service.js";
 import { userService } from "../services/user.service.js";
 
 export function registerHistoryHandler(bot: Bot<BotContext>) {
-    
-        
-    bot.command("history", async (ctx) => {
-      console.log("HISTORY COMMAND");
-
+  bot.command("history", async (ctx) => {
     if (!ctx.from) return;
 
     const user = await userService.getByTelegramId(ctx.from.id);
@@ -19,30 +15,61 @@ export function registerHistoryHandler(bot: Bot<BotContext>) {
       return;
     }
 
-    const meals = await mealService.getHistory(user.id);
+    const meals = await mealService.getToday(user.id);
 
     if (!meals.length) {
-      await ctx.reply("📭 Історія поки що порожня.");
+      await ctx.reply("📭 За сьогодні ще немає прийомів їжі.");
       return;
     }
 
-    const lastMeals = meals.slice(0, 10);
+    const total = meals.reduce(
+      (acc, meal) => {
+        acc.calories += meal.calories;
+        acc.protein += meal.protein;
+        acc.fat += meal.fat;
+        acc.carbs += meal.carbs;
 
-    const text = lastMeals
-      .map((meal, index) => {
-        const date = new Date(meal.createdAt).toLocaleString("uk-UA");
+        return acc;
+      },
+      {
+        calories: 0,
+        protein: 0,
+        fat: 0,
+        carbs: 0,
+      }
+    );
 
-        return `${index + 1}. ${date}
+    const today = new Intl.DateTimeFormat("uk-UA").format(new Date());
 
-🔥 ${meal.calories} ккал
-🥩 ${meal.protein} г
-🥑 ${meal.fat} г
-🍚 ${meal.carbs} г
+    const mealBlocks = meals
+      .slice()
+      .reverse()
+      .map((meal) => {
+        const time = new Date(meal.createdAt).toLocaleTimeString("uk-UA", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
 
-💬 ${meal.coachComment}`;
+      const mealTitle =
+  meal.mealName ??
+  "Невідома страва";
+
+        return `🕒 ${time}
+🍽 ${mealTitle}
+🔥 ${meal.calories.toFixed(0)} ккал`;
       })
-      .join("\n\n━━━━━━━━━━━━━━\n\n");
+      .join("\n\n");
 
-    await ctx.reply(text);
+    await ctx.reply(`📅 ${today}
+
+🔥 ${total.calories.toFixed(0)} / ${user.dailyCalories} ккал
+
+🥩 ${total.protein.toFixed(1)} / ${user.dailyProtein} г
+🥑 ${total.fat.toFixed(1)} / ${user.dailyFat} г
+🍚 ${total.carbs.toFixed(1)} / ${user.dailyCarbs} г
+
+━━━━━━━━━━━━━━
+
+${mealBlocks}`);
   });
 }

@@ -1,14 +1,13 @@
 export interface Food {
   name: string;
-  englishName: string;
+  englishName?: string;
   estimatedWeight: number;
 }
 
 export interface MealAnalysis {
-  foods: {
-    name: string;
-    estimatedWeight: number;
-  }[];
+  mealName: string;
+
+  foods: Food[];
 
   coachComment: string;
 }
