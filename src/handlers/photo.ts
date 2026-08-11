@@ -58,7 +58,9 @@ async function processPhoto(
     healthNotes: user.healthNotes,
   },
   description
-);
+    );
+    
+    console.log("MEAL:", JSON.stringify(meal, null, 2));
 
     const nutrition = await analyzeNutrition(meal);
 
