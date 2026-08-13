@@ -97,14 +97,21 @@ await mealService.saveMeal({
   }catch (error) {
   console.error("PHOTO ERROR:", error);
 
+  let message =
+    "❌ Не вдалося проаналізувати фотографію.";
+
   if (error instanceof Error) {
-    console.error(error.stack);
+    if (error.message.includes('"code":503')) {
+      message =
+        "⚠️ Сервіс аналізу зараз перевантажений. Спробуйте ще раз через кілька секунд.";
+    }
+
+    if (error.message.includes('"code":429')) {
+      message =
+        "⚠️ Вичерпано ліміт запитів до AI. Спробуйте пізніше.";
+    }
   }
 
-  try {
-    await ctx.reply(
-      `❌ ${error instanceof Error ? error.message : "Невідома помилка"}`
-    );
-  } catch {}
+  await ctx.reply(message);
 }
 }
